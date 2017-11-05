@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="loanvoucher" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.1000000000000005"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="203"/>
+	<parameter name="cv_number" class="java.lang.String"/>
+	<parameter name="fullname" class="java.lang.String"/>
+	<parameter name="amountInWords" class="java.lang.String"/>
+	<parameter name="pn_number" class="java.lang.String"/>
+	<parameter name="checkNo" class="java.lang.String"/>
+	<parameter name="amount" class="java.lang.Double"/>
+	<parameter name="explaination" class="java.lang.String"/>
+	<parameter name="firstDue" class="java.lang.String"/>
+	<parameter name="lastDue" class="java.lang.String"/>
+	<parameter name="grossAmount" class="java.lang.Double"/>
+	<parameter name="interest" class="java.lang.Double"/>
+	<parameter name="processing_fee" class="java.lang.Double"/>
+	<parameter name="deductions" class="java.lang.Double"/>
+	<parameter name="cashonhand" class="java.lang.Double"/>
+	<queryString>
+		<![CDATA[select * from loan]]>
+	</queryString>
+	<field name="id" class="java.lang.Long"/>
+	<field name="clientId" class="java.lang.Long"/>
+	<field name="pnNo" class="java.lang.String"/>
+	<field name="date" class="java.sql.Date"/>
+	<field name="monthlyAmmortization" class="java.lang.Double"/>
+	<field name="monthlyChange" class="java.lang.Double"/>
+	<field name="loanType" class="java.lang.String"/>
+	<field name="loanTerm" class="java.lang.Double"/>
+	<field name="grossLoan" class="java.lang.Double"/>
+	<field name="interest" class="java.lang.Double"/>
+	<field name="principal" class="java.lang.Double"/>
+	<field name="processingFee" class="java.lang.Double"/>
+	<field name="otherDeduction" class="java.lang.String"/>
+	<field name="amountOfCheck" class="java.lang.Double"/>
+	<field name="firstDue" class="java.sql.Date"/>
+	<field name="lastDue" class="java.sql.Date"/>
+	<field name="branch_id" class="java.lang.Integer"/>
+	<field name="active" class="java.lang.Boolean"/>
+	<variable name="totalDebit" class="java.lang.Double">
+		<variableExpression><![CDATA[$P{grossAmount}]]></variableExpression>
+	</variable>
+	<variable name="totalCredit" class="java.lang.Double">
+		<variableExpression><![CDATA[$P{interest}+$P{processing_fee}+$P{deductions}+$P{cashonhand}]]></variableExpression>
+	</variable>
+	<variable name="netcash" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{totalDebit}-($V{totalCredit}-$P{cashonhand})]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="86" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="227" height="34"/>
+				<textElement>
+					<font size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MyCredit Pilipinas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="34" width="227" height="34"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Check Voucher]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="455" y="59" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="86" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="64" height="20"/>
+				<textElement/>
+				<text><![CDATA[CV Number: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="64" height="20"/>
+				<textElement/>
+				<text><![CDATA[Full Name: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="64" height="20"/>
+				<textElement/>
+				<text><![CDATA[In Words: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="227" y="0" width="60" height="20"/>
+				<textElement/>
+				<text><![CDATA[PN Number: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="397" y="0" width="58" height="20"/>
+				<textElement/>
+				<text><![CDATA[Check No.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="397" y="40" width="58" height="20"/>
+				<textElement/>
+				<text><![CDATA[Amount: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="64" y="0" width="150" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{cv_number}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="64" y="20" width="150" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{fullname}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="64" y="40" width="323" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{amountInWords}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="287" y="0" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{pn_number}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="0" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{checkNo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="455" y="40" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{amount}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="85" width="555" height="1"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="127" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="345" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DETAILS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="345" y="0" width="100" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DEBIT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="445" y="0" width="100" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CREDIT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="20" width="315" height="20"/>
+				<textElement/>
+				<text><![CDATA[Gross Amount]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="40" width="315" height="20"/>
+				<textElement/>
+				<text><![CDATA[Interest/Principal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="60" width="315" height="20"/>
+				<textElement/>
+				<text><![CDATA[Processing Fee]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="80" width="315" height="20"/>
+				<textElement/>
+				<text><![CDATA[Other Deductions]]></text>
+			</staticText>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="277" y="20" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{grossAmount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="377" y="40" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{interest}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="377" y="60" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{processing_fee}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="377" y="80" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{deductions}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="20" width="555" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="30" y="100" width="315" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cash on Hand]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="377" y="100" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{cashonhand}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="119" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Explaination: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[First Due:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Last Due: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="71" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Prepared By:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="115" width="100" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="127" y="71" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Checked By:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="255" y="71" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Approved By:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="378" y="71" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Recieved By:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="127" y="114" width="100" height="1"/>
+			</line>
+			<line>
+				<reportElement x="255" y="113" width="100" height="1"/>
+			</line>
+			<line>
+				<reportElement x="378" y="112" width="100" height="1"/>
+			</line>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="100" y="20" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{firstDue}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="0" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{explaination}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="100" y="40" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{lastDue}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="0" width="105" height="20"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Deductions: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="292" y="20" width="105" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Net Cash: ]]></text>
+			</staticText>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="397" y="0" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{totalCredit}-$P{cashonhand}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="397" y="20" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{netcash}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement x="214" y="6" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL: ]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="277" y="6" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{totalDebit}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="377" y="6" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{totalCredit}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="5" width="555" height="1"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>
